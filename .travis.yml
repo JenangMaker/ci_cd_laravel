@@ -1,39 +1,30 @@
 os:
-  - linux
-# bahasa
+- linux
 language: php
-# distro
 dist: trusty
-
 php:
-  - "7.1"
-# service yang digunakan
+- '7.1'
 services:
-  - docker
-# grouping  task
+- docker
 jobs:
   include:
-    # melakukan testing
-    - stage: "Tests"
-      name: "Unit Test PHP"
-      script:
-        - travis_retry composer self-update
-        - travis_retry composer install --prefer-source --no-interaction
-        - cp .env.example .env
-        - php artisan key:generate
-        - vendor/bin/phpunit tests/Feature/ExampleTest.php
-    # melakukan build images dan publish ke docker hub
-    - stage: "Build Docker Image"
-      name: "Build Images Docker"
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build -t ci_cd_laravel .
-        - docker images
-        - docker tag ci_cd_laravel $DOCKER_USERNAME/ci_cd_laravel
-        - docker push $DOCKER_USERNAME/ci_cd_laravel
-
+  - stage: Tests
+    name: Unit Test PHP
+    script:
+    - travis_retry composer self-update
+    - travis_retry composer install --prefer-source --no-interaction
+    - cp .env.example .env
+    - php artisan key:generate
+    - vendor/bin/phpunit tests/Feature/ExampleTest.php
+  - stage: Build Docker Image
+    name: Build Images Docker
+    script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t ci_cd_laravel .
+    - docker images
+    - docker tag ci_cd_laravel $DOCKER_USERNAME/ci_cd_laravel
+    - docker push $DOCKER_USERNAME/ci_cd_laravel
 deploy:
   provider: heroku
   api_key:
-    secure: "312f0826-db4c-4c0d-aa82-b2b427c3268f"
-    app: jenangmaker-node-js-test
+    secure: qEstlp4/diududLvNpqn1oBgDzyKU7Nw7R+Mc2p0VyUMAu41DDdsjNTuV+YK7MZlA5GVNeWLQOGXBiXTdY2CAj/NVguPlfUWFOVWsrHpcMZ9tkKgEQn+rvoLbyzJMXrrVdOtRc2NlNsZcHi0d4N2rS5chuChT1MuBcNBj9sSnryNED+0FNocKSBS0lTWz/qo7JTJ4JkUQLnmHOeWkUYs3Ggq0Of0ThPxwmxKT8hliy05Qnx3WyWHSHwR8N8+zKYPnaJeFSuQzouwRA5P+xLzZXNTaxGVg8SyIF0KFW9GwCp3tsnvc2vYCSp2TXRlLATL5lpuM+thRFxehfnL3E2A8nNqh7k+tG/yyujiBiPMeZHTYCEkiJI72OOBCQc4h/pARdd1xn52uaH9T0vufQfzhARKYvKg7zXg9imwG+R/7SSv5DBSXYwvq4WAbJe5BMX20E8tbC3O9w03lTggpC+h+QX8wlrMuidf0mpjaiaged2Mcf1J9CKNmnj/LJYzZbBHaQWRwI1eeRyvTQWI4knxmvSXFZOdhXJ0a1uJEfvLASzZPGofSQCK+O9GadwX54cTk58sPjB1UkAHgY3Rh0TEC5sbesAaG7XZnD2Cf+M9g76M4QuD+dH18M3Feij6gXmqB2cxekY5pEW8LQh/aKU7IttWGy/eKfoxo1UsgdUl6qs=
