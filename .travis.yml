@@ -31,3 +31,9 @@ jobs:
         - docker images
         - docker tag ci_cd_laravel $DOCKER_USERNAME/ci_cd_laravel
         - docker push $DOCKER_USERNAME/ci_cd_laravel
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "312f0826-db4c-4c0d-aa82-b2b427c3268f"
+    app: jenangmaker-node-js-test
