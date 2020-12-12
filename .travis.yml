@@ -24,8 +24,10 @@ jobs:
     - docker images
     - docker tag ci_cd_laravel $DOCKER_USERNAME/ci_cd_laravel
     - docker push $DOCKER_USERNAME/ci_cd_laravel
-deploy:
-  provider: heroku
-  app: jenangmaker-node-js-test
-  api_key:
-    secure: jeui2Pz00N/jlQzr76CXwza+HhqaWx9So/BVOngIDSoB6J35NZTdicSIxm2fAFN19EnK+9sqXA4yqtM5lHDQO2Tyi/vtagzGCXfRFxxkqx9173eC5ng1DsZNPdGe3z7fjt+VWSC0OhUFxklQSGrC0loU3Sa8x3zbfM2AyxDUffaI1/8h70HpgjP37pC7OuDhP4glHrCqwSB5pum6GTSwu4bA+EZ+LyP7yN57AmqEvShbykoHcT+ytEh5+2Gj0X0BeLTMaaspHpGcsUIWRZY1WybG4f7h1U90xEL85PAmAu6XsA9dgA6faJGeE7r5upbXceI8UUIBUXu+qwTHivqFoUfIiU2FjsOyu5zaAcxOx+nGJWH3uQputZUEY50poXprP6ZSOb1Tumm/Dycued4Wsv2qnWCnElc351WiQrSjmw9+wwCqm/h9sqoqkF9zUgOqmCSYFjz9gLIwAEGN6eTVyECCHaK1rz0H32WzFqoB5EZB2Y3EBZdA+W7CEIHepP88VSatsuoPwbOKKwyD3VUW3vBEF4vYGtIKvexO5/DIqY/R2LSYe16i129W7oubXlK8Lrx7g0pt69LBbIvk1bcMkiiRiopYPprULfFJjF5QfCABT6F9QqAFTUdoBQXhOInjadguEQM8UnCM074DRqowp3jvs7Pg8tzV/alijqN+U98=
+  - stage: Deploy to heroku
+    name: Deploying to Heroku
+    script:
+    - curl https://cli-assets.heroku.com/install.sh | sh  #install heroku
+    - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com  #login to registry.heroku.com
+    - docker tag ci_cd_laravel registry.heroku.com/$HEROKU_APP/web
+    - heroku container:release web --app $HEROKU_APP
