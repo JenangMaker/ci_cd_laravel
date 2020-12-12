@@ -32,4 +32,5 @@ jobs:
     - curl https://cli-assets.heroku.com/install.sh | sh  #install heroku
     - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com  #login to registry.heroku.com
     - docker tag ci_cd_laravel registry.heroku.com/$HEROKU_APP/web
+    - docker push registry.heroku.com/$HEROKU_APP/web
     - heroku container:release web --app $HEROKU_APP
